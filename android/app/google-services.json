@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "423522306058",
+    "project_id": "student-store-5253f",
+    "storage_bucket": "student-store-5253f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423522306058:android:d5e0c387b5a893b5af37f3",
+        "android_client_info": {
+          "package_name": "com.example.scl_mgmt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW5V50AR7vDLFzHfN5XSfLwjRwMSOvtJY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
