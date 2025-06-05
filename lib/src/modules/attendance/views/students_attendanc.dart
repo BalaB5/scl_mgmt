@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controller/attendance_controller.dart';
+import '../../../controller/attendance_controller.dart';
 import '../../../controller/student_controller.dart';
 import '../../../utils/enums.dart';
 
@@ -18,7 +18,7 @@ class _StudentsAttendancState extends State<StudentsAttendanc> {
   final AttendanceController attendanceController = Get.put(
     AttendanceController(),
   );
-  final StudentController studentController = Get.put(StudentController());
+  StudentController studentController = Get.put(StudentController());
 
   @override
   void initState() {
@@ -29,16 +29,17 @@ class _StudentsAttendancState extends State<StudentsAttendanc> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(title: Text('${widget.standard.name} Attendance'), backgroundColor: const Color.fromARGB(255, 178, 219, 253),),
+      appBar: AppBar(
+        title: Text('${widget.standard.name} Attendance'),
+        backgroundColor: const Color.fromARGB(255, 178, 219, 253),
+      ),
       body: Obx(() {
         final attendance = attendanceController.todayAttendance;
 
-        final students =
-            studentController.students
-                .where((s) => s.standard == widget.standard)
-                .toList();
+        final students = studentController.students
+            .where((s) => s.standard == widget.standard)
+            .toList();
 
         return ListView.builder(
           itemCount: students.length,

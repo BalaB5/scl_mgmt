@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants.dart';
+
 class SquareIconButton extends StatelessWidget {
   final Function() onPressed;
   final Color iconColor, buttonColor;
@@ -8,7 +9,14 @@ class SquareIconButton extends StatelessWidget {
   final IconData icon;
   final double borderRadius;
 
-  const SquareIconButton({super.key, required this.onPressed, this.iconColor = COLOR_GREEN, this.buttonColor = Colors.white, this.width = 70, required this.icon, this.borderRadius = 10});
+  const SquareIconButton(
+      {super.key,
+      required this.onPressed,
+      this.iconColor = greenColor,
+      this.buttonColor = Colors.white,
+      this.width = 70,
+      required this.icon,
+      this.borderRadius = 10});
 
   @override
   Widget build(BuildContext context) {

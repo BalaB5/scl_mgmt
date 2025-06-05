@@ -1,3 +1,5 @@
+// students_list_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconic/iconic.dart';
@@ -8,14 +10,27 @@ import 'student_add_update.dart';
 import 'students_details.dart';
 
 class StudentsListPage extends StatelessWidget {
+  final String? defaultGender;
+  final StudentStandard? defaultStandard;
+  final StudentStatus? defaultStatus;
+
+  StudentsListPage({
+    super.key,
+    this.defaultGender,
+    this.defaultStandard,
+    this.defaultStatus,
+  }) {
+    if (defaultGender != null) selectedGender.value = defaultGender;
+    if (defaultStandard != null) selectedStandard.value = defaultStandard;
+    if (defaultStatus != null) selectedStatus.value = defaultStatus;
+  }
+
   final StudentController controller = Get.put(StudentController());
   final RxString searchQuery = ''.obs;
   final Rx<StudentStandard?> selectedStandard = Rx<StudentStandard?>(null);
   final Rx<StudentStatus?> selectedStatus = Rx<StudentStatus?>(null);
   final Rx<String?> selectedGender = Rx<String?>(null);
-  TextEditingController sreach = TextEditingController();
-
-  StudentsListPage({super.key});
+  final TextEditingController search = TextEditingController();
 
   InputDecoration _inputDecoration(String label, {IconData? icon}) {
     return InputDecoration(
@@ -48,11 +63,12 @@ class StudentsListPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => StandardsList()));
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => StandardsList()),
+              );
             },
-            icon: Icon(Icons.edit_calendar),
+            icon: const Icon(Icons.how_to_reg, color: Colors.black
+            ),
           ),
         ],
       ),
@@ -66,21 +82,19 @@ class StudentsListPage extends StatelessWidget {
                 shadowColor: Colors.black26,
                 borderRadius: BorderRadius.circular(14),
                 child: TextField(
-                  controller: sreach,
-                  decoration: _inputDecoration(
-                    'Search by name',
-                    icon: Icons.search,
-                  ).copyWith(
-                    suffixIcon:
-                        searchQuery.value.isNotEmpty
-                            ? IconButton(
-                              icon: const Icon(Icons.clear),
-                              onPressed: () {
-                                searchQuery.value = '';
-                                sreach.clear();
-                              },
-                            )
-                            : null,
+                  controller: search,
+                  decoration:
+                      _inputDecoration('Search by name', icon: Icons.search)
+                          .copyWith(
+                    suffixIcon: searchQuery.value.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              searchQuery.value = '';
+                              search.clear();
+                            },
+                          )
+                        : null,
                   ),
                   onChanged: (value) => searchQuery.value = value,
                 ),
@@ -98,15 +112,10 @@ class StudentsListPage extends StatelessWidget {
                       child: DropdownButtonFormField<StudentStandard?>(
                         value: selectedStandard.value,
                         decoration: _inputDecoration('Standard'),
-                        items:
-                            StudentStandard.values
-                                .map(
-                                  (s) => DropdownMenuItem(
-                                    value: s,
-                                    child: Text(s.name),
-                                  ),
-                                )
-                                .toList(),
+                        items: StudentStandard.values
+                            .map((s) =>
+                                DropdownMenuItem(value: s, child: Text(s.name)))
+                            .toList(),
                         onChanged: (val) => selectedStandard.value = val,
                       ),
                     ),
@@ -122,15 +131,10 @@ class StudentsListPage extends StatelessWidget {
                       child: DropdownButtonFormField<String?>(
                         value: selectedGender.value,
                         decoration: _inputDecoration('Gender'),
-                        items:
-                            ['Male', 'Female', 'Other']
-                                .map(
-                                  (g) => DropdownMenuItem(
-                                    value: g,
-                                    child: Text(g),
-                                  ),
-                                )
-                                .toList(),
+                        items: ['Male', 'Female', 'Other']
+                            .map((g) =>
+                                DropdownMenuItem(value: g, child: Text(g)))
+                            .toList(),
                         onChanged: (val) => selectedGender.value = val,
                       ),
                     ),
@@ -150,15 +154,10 @@ class StudentsListPage extends StatelessWidget {
                       child: DropdownButtonFormField<StudentStatus?>(
                         value: selectedStatus.value,
                         decoration: _inputDecoration('Status'),
-                        items:
-                            StudentStatus.values
-                                .map(
-                                  (s) => DropdownMenuItem(
-                                    value: s,
-                                    child: Text(s.name),
-                                  ),
-                                )
-                                .toList(),
+                        items: StudentStatus.values
+                            .map((s) =>
+                                DropdownMenuItem(value: s, child: Text(s.name)))
+                            .toList(),
                         onChanged: (val) => selectedStatus.value = val,
                       ),
                     ),
@@ -171,22 +170,17 @@ class StudentsListPage extends StatelessWidget {
                     selectedStandard.value = null;
                     selectedGender.value = null;
                     selectedStatus.value = null;
-                    sreach.clear();
+                    search.clear();
                   },
                   icon: const Icon(Icons.refresh, color: Colors.white),
-                  label: const Text(
-                    "Clear Filters",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  label: const Text("Clear Filters",
+                      style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
+                        horizontal: 16, vertical: 14),
                   ),
                 ),
               ],
@@ -206,76 +200,60 @@ class StudentsListPage extends StatelessWidget {
                 }
 
                 return ListView(
-                  children:
-                      grouped.entries.map((entry) {
-                        final standard = entry.key;
-                        final students = entry.value;
+                  children: grouped.entries.map((entry) {
+                    final standard = entry.key;
+                    final students = entry.value;
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(top: 12, bottom: 6),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 12,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 12, bottom: 6),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 12),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.blue.shade200,
+                          ),
+                          child: Text(
+                            'Standard: ${standard.name}',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        ...students.map((student) => Card(
+                              margin: const EdgeInsets.symmetric(vertical: 4),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue.shade200,
-                              ),
-                              child: Text(
-                                'Standard: ${standard.name}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            ...students.map(
-                              (student) => Card(
-                                margin: const EdgeInsets.symmetric(vertical: 4),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: Color.fromARGB(
-                                      255,
-                                      186,
-                                      211,
-                                      254,
-                                    ),
-                                    child: Icon(
-                                      student.gender.toLowerCase() == 'female'
-                                          ? Iconic.woman_head
-                                          : student.gender.toLowerCase() ==
-                                              'male'
-                                          ? Iconic.man_head
-                                          : Icons.person,
-                                    ),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 186, 211, 254),
+                                  child: Icon(
+                                    student.gender.toLowerCase() == 'female'
+                                        ? Iconic.woman_head
+                                        : student.gender.toLowerCase() == 'male'
+                                            ? Iconic.man_head
+                                            : Icons.person,
                                   ),
-                                  title: Text(student.name),
-                                  subtitle: Text(
-                                    'Gender: ${student.gender} | Status: ${student.status.name}',
-                                  ),
-                                  trailing: const Icon(
-                                    Icons.open_in_new_sharp,
-                                    size: 18,
-                                  ),
-                                  onTap: () async {
-                                    await Get.to(
-                                      () =>
-                                          StudentDetailsPage(student: student),
-                                    );
-                                    controller.fetchAllStudents();
-                                  },
                                 ),
+                                title: Text(student.name),
+                                subtitle: Text(
+                                  'Gender: ${student.gender} | Status: ${student.status.name}',
+                                ),
+                                trailing: const Icon(Icons.open_in_new_sharp,
+                                    size: 18),
+                                onTap: () async {
+                                  await Get.to(() =>
+                                      StudentDetailsPage(student: student));
+                                  controller.fetchAllStudents();
+                                },
                               ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
+                            )),
+                      ],
+                    );
+                  }).toList(),
                 );
               }),
             ),

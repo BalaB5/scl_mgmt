@@ -1,4 +1,3 @@
-// Required Packages
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -44,11 +43,10 @@ class StudentController extends GetxController {
   }
 
   Future<List<Student>> getStudentsByStandard(StudentStandard standard) async {
-    final snapshot =
-        await _db
-            .collection('students')
-            .where('standard', isEqualTo: standardToString(standard))
-            .get();
+    final snapshot = await _db
+        .collection('students')
+        .where('standard', isEqualTo: standardToString(standard))
+        .get();
     return snapshot.docs.map((doc) => Student.fromMap(doc.data())).toList();
   }
 
@@ -58,11 +56,10 @@ class StudentController extends GetxController {
   }
 
   Future<int> getStudentCountByStandard(StudentStandard standard) async {
-    final snapshot =
-        await _db
-            .collection('students')
-            .where('standard', isEqualTo: standardToString(standard))
-            .get();
+    final snapshot = await _db
+        .collection('students')
+        .where('standard', isEqualTo: standardToString(standard))
+        .get();
     return snapshot.size;
   }
 
@@ -72,22 +69,16 @@ class StudentController extends GetxController {
     StudentStatus? status,
     String? gender,
   }) {
-    final filtered =
-        students.where((student) {
-          final matchesSearch = student.name.toLowerCase().contains(
-            searchQuery.toLowerCase(),
-          );
-          final matchesStandard =
-              standard == null || student.standard == standard;
-          final matchesStatus = status == null || student.status == status;
-          final matchesGender =
-              gender == null ||
-              student.gender.toLowerCase() == gender.toLowerCase();
-          return matchesSearch &&
-              matchesStandard &&
-              matchesStatus &&
-              matchesGender;
-        }).toList();
+    final filtered = students.where((student) {
+      final matchesSearch = student.name.toLowerCase().contains(
+        searchQuery.toLowerCase(),
+      );
+      final matchesStandard = standard == null || student.standard == standard;
+      final matchesStatus = status == null || student.status == status;
+      final matchesGender =
+          gender == null || student.gender.toLowerCase() == gender.toLowerCase();
+      return matchesSearch && matchesStandard && matchesStatus && matchesGender;
+    }).toList();
 
     final grouped = <StudentStandard, List<Student>>{};
     for (var student in filtered) {
@@ -95,15 +86,30 @@ class StudentController extends GetxController {
     }
     return grouped;
   }
-    Future<Map<StudentStandard, int>> getStudentCountsByStandard() async {
+
+  Future<Map<StudentStandard, int>> getStudentCountsByStandard() async {
     Map<StudentStandard, int> counts = {};
 
     for (var standard in StudentStandard.values) {
-      final count = students.where((s) => s.standard == standard).length;
+      final count = students.where((s) => s.standard == standard && s.status == StudentStatus.active).length;
       counts[standard] = count;
     }
 
     return counts;
   }
 
+  int get totalActiveStudents =>
+      students.where((s) => s.status == StudentStatus.active).length;
+
+  int get totalInactiveStudents =>
+      students.where((s) => s.status == StudentStatus.inactive).length;
+
+  int get totalGraduatedStudents =>
+      students.where((s) => s.status == StudentStatus.graduated).length;
+
+  int get totalBoys =>
+      students.where((s) => s.gender.toLowerCase() == 'male').length;
+
+  int get totalGirls =>
+      students.where((s) => s.gender.toLowerCase() == 'female').length;
 }

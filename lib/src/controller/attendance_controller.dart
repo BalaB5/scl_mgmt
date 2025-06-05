@@ -1,13 +1,17 @@
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'student_controller.dart';
 
 class AttendanceController extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final StudentController studentController = Get.put(StudentController());
 
   var todayAttendance = <String, bool>{}.obs;
   var dailyPercentage = <String, double>{}.obs;
   var standardStudentCounts = <String, int>{}.obs;
   var standardPresentCounts = <String, int>{}.obs;
+
+
 
   Future<void> fetchTodayAttendance(String standardName) async {
     final today = DateTime.now();
@@ -23,8 +27,9 @@ class AttendanceController extends GetxController {
     for (var doc in snapshot.docs) {
       map[doc.id] = doc['present'] ?? false;
     }
+
     todayAttendance.assignAll(map);
-    _calculatePercentage(standardName);
+    calculatePercentage(standardName);
   }
 
   Future<void> markAttendance(
@@ -40,17 +45,18 @@ class AttendanceController extends GetxController {
         .set({'present': present}, SetOptions(merge: true));
 
     todayAttendance[studentId] = present;
-    _calculatePercentage(standardName);
+    calculatePercentage(standardName);
+    studentController.fetchAllStudents();
   }
 
   Future<void> setStandardStudentCount(
       String standard, Future<int> futureCount) async {
     final count = await futureCount;
     standardStudentCounts[standard] = count;
-    _calculatePercentage(standard);
+    calculatePercentage(standard);
   }
 
-  void _calculatePercentage(String standard) {
+  void calculatePercentage(String standard) {
     final students = todayAttendance.length;
     final present = todayAttendance.values.where((p) => p).length;
     final total = standardStudentCounts[standard] ?? students;

@@ -57,8 +57,8 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  // color: Color(0xffE2F3D4),
-                                ),
+                                    // color: Color(0xffE2F3D4),
+                                    ),
                                 child: Center(child: Text(student.name)),
                               ),
                               Positioned(
@@ -98,17 +98,16 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
                                       refreshAndSetState();
                                     }
                                   },
-                                  itemBuilder:
-                                      (context) => const [
-                                        PopupMenuItem(
-                                          value: 'delete',
-                                          child: Text('Delete'),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'deactivate',
-                                          child: Text('Deactivate'),
-                                        ),
-                                      ],
+                                  itemBuilder: (context) => const [
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: Text('Delete'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'deactivate',
+                                      child: Text('Deactivate'),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -116,6 +115,7 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
                         ),
                         addVerticalSpace(10),
                         Container(
+                          height: 800,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade200,
                             borderRadius: BorderRadius.only(
@@ -142,7 +142,8 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
                                           children: [
                                             Text(
                                               student.name,
-                                              style: TextStyle(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             addVerticalSpace(5),
                                             RichText(
@@ -161,8 +162,8 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
                                                         "  ${student.standard.name}",
                                                     style: textTheme.titleSmall!
                                                         .apply(
-                                                          color: COLOR_GREY,
-                                                        ),
+                                                      color: grayColor,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -177,7 +178,7 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
                                               TextSpan(
                                                 text: "Age : ",
                                                 style: TextStyle(
-                                                  color: COLOR_ORANGE,
+                                                  color: orange_color,
                                                 ),
                                               ),
                                               TextSpan(
@@ -216,8 +217,8 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
                                                   text: student.phoneNumber,
                                                   style: textTheme.bodyMedium!
                                                       .apply(
-                                                        fontWeightDelta: 4,
-                                                      ),
+                                                    fontWeightDelta: 4,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -237,8 +238,8 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
                                                   text: student.email,
                                                   style: textTheme.bodyMedium!
                                                       .apply(
-                                                        fontWeightDelta: 4,
-                                                      ),
+                                                    fontWeightDelta: 4,
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -331,35 +332,3 @@ class _StudentDetailsPageState extends State<StudentDetailsPage> {
     );
   }
 }
-  // Padding(
-          //   padding: const EdgeInsets.all(20),
-          //   child: ListView(
-          //     children: [
-          //       infoRow('Name', student.name),
-          //       infoRow('DOB', student.dob.toString().split(' ').first),
-          //       infoRow('Age', student.age.toString()),
-          //       infoRow('Gender', student.gender),
-          //       infoRow('Phone', student.phoneNumber),
-          //       infoRow('Email', student.email),
-          //       infoRow('Address', student.address),
-          //       infoRow('Father Name', student.fatherName),
-          //       infoRow('Mother Name', student.motherName),
-          //       infoRow('Standard', student.standard.name),
-          //       infoRow(
-          //         'Joining Date',
-          //         student.joiningDate.toString().split(' ').first,
-          //       ),
-          //       infoRow('Status', student.status.name),
-          //       const SizedBox(height: 20),
-          //       ElevatedButton(
-          //         onPressed: () async {
-          //           await Get.to(() => StudentAddUpdatePage(student: student));
-          //           await controller.fetchAllStudents();
-          //           refreshAndSetState();
-          //         },
-          //         child: const Text('Edit Details'),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-         

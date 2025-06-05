@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controller/student_controller.dart';
 import '../../../utils/enums.dart';
-import '../controller/attendance_controller.dart';
+import '../../../controller/attendance_controller.dart';
 import 'students_attendanc.dart';
 
 class StandardsList extends StatelessWidget {
